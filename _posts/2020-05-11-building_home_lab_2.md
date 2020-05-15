@@ -33,14 +33,14 @@ As I mentioned, I like to use default variables as much as possible. I don't wan
 ```yaml
 - name: "Set VM name if it has not been defined"
   set_fact:
-     vm_name: "test-{{ 1000 | random }}"
-     run_once: "yes"
-   when: vm_name is not defined
+    vm_name: "test-{{ 1000 | random }}"
+    run_once: "yes"
+  when: vm_name is not defined
 
 - name: "Check if VM IP has been set"
   fail:
     msg: "No IP has been set to VM. Please set it by (vm_ip) variable"
-    when: vm_ip is not defined
+  when: vm_ip is not defined
 ```
 
 Then the next thing is to download the cloud image if we have not done it already.
@@ -55,7 +55,7 @@ Then the next thing is to download the cloud image if we have not done it alread
   get_url:
     url: "{{ image_url }}"
     dest: "{{ image_path }}"
- when: not image_exist.stat.exists
+  when: not image_exist.stat.exists
 ```
 
 Then we need to create the image directory and place our VM disk image. But wait a second, what if I provided a name which already exists. Don't worry I am also checking that.
@@ -98,9 +98,9 @@ Now the most important part, we will need to provide user and meta data to our v
   template:
     src: "{{ item }}"
     dest: "/var/lib/libvirt/images/{{ vm_name }}/{{ item.split('.')[0] }}"
-   loop:
-     - meta-data.j2
-     - user-data.j2
+  loop:
+    - meta-data.j2
+    - user-data.j2
 
 - name: "Install genisoimage to create iso"
   yum:
