@@ -135,7 +135,7 @@ So we are almost ready. It is time to run the virt-install command to complete o
 
 And we are done. You are having an up and running brand new VM to use. Let me also give you I ran it in my environment.
 
-```shell
+```
 onur@lab:~ $ ansible-playbook main.yaml -e "vm_ip=192.168.0.37"
 
 PLAY [Provision a VM play] *************************************************
