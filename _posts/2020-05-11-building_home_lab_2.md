@@ -8,7 +8,7 @@ author: Onur Yasarlar
 ---
 In this article, I will show you how you can provision new VMs in your infrastructure with Ansible. My preferred method to provision a new VM would be to use Terraform but since we have only our hypervisor server installed yet, we need to first provision the environment. I will be using CentOS 7 cloud image here but you can also go with CentOS 8 if you like. 
 
-So let's make our hands dirty and create a new role for this task. I named it kvm_cloud_init and it is almost the ugliest way of using Ansible. Ansible Galaxy rated also my module with "3.1/5" but I already know why. I needed to use "shell" module lots of time instead of other regular Ansible modules because there is no official Ansible KVM module that satisfies my needs. Who knows, this can be my next project to write a fully functional KVM module in Ansible.
+So let's make our hands dirty and create a new role for this task. I named it kvm_cloud_init and it is almost the ugliest way of using Ansible. [Ansible Galaxy](https://galaxy.ansible.com/yasarlaro/kvm_cloud_init) rated also my module with "3.4/5" but I already know why. I needed to use "shell" module lots of time instead of other regular Ansible modules because there is no official Ansible KVM module that satisfies my needs. Who knows, this can be my next project to write a fully functional KVM module in Ansible.
 
 Since I am using generic cloud images, I used cloud-init to customize my new virtual machine. Cloud-init is the de facto industry-standard tool for cross-platform cloud instance initialization. If you are not familiar with it, please spend some time to understand what it is and how you can use it.
 
