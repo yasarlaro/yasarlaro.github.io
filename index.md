@@ -2,6 +2,13 @@
 layout: default
 ---
 
-# POSTS
+<h1>Latest Posts</h1>
 
-- [Building your home lab - 1] (https://yasarlaro.github.io/2020/05/11/building_home_lab_2.html)
+<ul>
+  {% for post in site.posts %}
+    <li>
+      <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+      {{ post.excerpt }}
+    </li>
+  {% endfor %}
+</ul>

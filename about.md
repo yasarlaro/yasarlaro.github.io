@@ -4,4 +4,4 @@ title: About
 ---
 # About page
 
-This page tells you a little bit about me.
+Linux and automation freak with 10 years of working experience.

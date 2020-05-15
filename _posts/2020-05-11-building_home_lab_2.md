@@ -1,11 +1,16 @@
+---
+layout: post
+title: Building your home lab - 2
+excerpt: "Provisioning a VM with Ansible and cloud-init"
+comments: true
+category: blog
+author: Onur Yasarlar
+---
 In this article, I will show you how you can provision new VMs in your infrastructure with Ansible. My preferred method to provision a new VM would be to use Terraform but since we have only our hypervisor server installed yet, we need to first provision the environment. I will be using CentOS 7 cloud image here but you can also go with CentOS 8 if you like. 
 
-
-So let's make our hands dirty and create a new role for this task. I named it kvm_cloud_init and it is almost the ugliest way of using Ansible. Ansible Galaxy rated also my module with "3.1/5" but I already know why. I needed to use "shell" module lots of time instead of other regular Ansible modules because there is no official Ansible KVM module that satisfies my needs. Who knows, this can be my next project to write a fully functional KVM module in Ansible. 
-
+So let's make our hands dirty and create a new role for this task. I named it kvm_cloud_init and it is almost the ugliest way of using Ansible. Ansible Galaxy rated also my module with "3.1/5" but I already know why. I needed to use "shell" module lots of time instead of other regular Ansible modules because there is no official Ansible KVM module that satisfies my needs. Who knows, this can be my next project to write a fully functional KVM module in Ansible.
 
 Since I am using generic cloud images, I used cloud-init to customize my new virtual machine. Cloud-init is the de facto industry-standard tool for cross-platform cloud instance initialization. If you are not familiar with it, please spend some time to understand what it is and how you can use it.
-
 
 So what do we need to have a VM to be provisioned? First of all, we require a running hypervisor and we already covered that part in the previous article. Then let's make the list:
 
@@ -17,17 +22,15 @@ So what do we need to have a VM to be provisioned? First of all, we require a ru
 
 - Operating System Image
 
--  User Data and Meta Data for Cloud-Init
-
+- User Data and Meta Data for Cloud-Init
 
 As you can see, almost all of them can be kept under default values except IP address if you are not using DHCP. Using DHCP could be an easier solution but we like the hard way, right? That's why the role expects 'vm_ip' variable and fails if you forget to define it. 
 
-
 Let's go to the tasks of the play and see what and how we are covering the provisioning.
-
 
 As I mentioned, I like to use default variables as much as possible. I don't want my code to fail because of an unset variable. As you can see below, I am starting my main playbook with variable checking. If you do want to set your hostname, feel free to set vm_name variable while running the role
 
+```yaml
 - name: "Set VM name if it has not been defined"
   set_fact:
      vm_name: "test-{{ 1000 | random }}"
@@ -38,8 +41,10 @@ As I mentioned, I like to use default variables as much as possible. I don't wan
   fail:
     msg: "No IP has been set to VM. Please set it by (vm_ip) variable"
     when: vm_ip is not defined
+```
 
 Then the next thing is to download the cloud image if we have not done it already.
+
 ```yaml
 - name: "Check if Image file exists"
   stat:
@@ -52,7 +57,9 @@ Then the next thing is to download the cloud image if we have not done it alread
     dest: "{{ image_path }}"
  when: not image_exist.stat.exists
 ```
+
 Then we need to create the image directory and place our VM disk image. But wait a second, what if I provided a name which already exists. Don't worry I am also checking that.
+
 ```yaml
 - name: "Check if VM directory exists"
   stat:
@@ -74,14 +81,18 @@ Then we need to create the image directory and place our VM disk image. But wait
     dest: "/var/lib/libvirt/images/{{ vm_name }}/{{ vm_name }}.qcow2"
     remote_src: "yes"
 ```
+
 Then it is time to resize our disk size. We don't want to live with a very minimal size.
+
 ```yaml
 - name: "Resize VM boot disk"
   shell: "qemu-img resize {{ vm_name }}.qcow2 {{vm_root_disk_size}}"
   args:
     chdir: "/var/lib/libvirt/images/{{ vm_name }}/"
 ```
+
 Now the most important part, we will need to provide user and meta data to our virtual machine with the help of cloud-init. We need to generate an ISO image with the data and mount it while installing our virtual machine. I strongly recommend you to take a look at user and meta data templates in the role as almost all customization happens there. By the way, if you do not take a look, you will not know which user and default password to use to login to your newly provisioned VM :)
+
 ```yaml
 - name: "Copy user-data and meta-data cloud-init tempalates"
   template:
@@ -101,7 +112,9 @@ Now the most important part, we will need to provide user and meta data to our v
   args:
    chdir: "/var/lib/libvirt/images/{{ vm_name }}/"
 ```
+
 So we are almost ready. It is time to run the virt-install command to complete our work
+
 ```yaml
 - name: "Provision VM"
    shell: >
@@ -119,9 +132,10 @@ So we are almost ready. It is time to run the virt-install command to complete o
    args:
      chdir: "/var/lib/libvirt/images/{{ vm_name }}/"
 ```
+
 And we are done. You are having an up and running brand new VM to use. Let me also give you I ran it in my environment.
 
-```
+```shell
 onur@lab:~ $ ansible-playbook main.yaml -e "vm_ip=192.168.0.37"
 
 PLAY [Provision a VM play] *************************************************
