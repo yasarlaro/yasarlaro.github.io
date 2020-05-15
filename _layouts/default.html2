@@ -29,7 +29,6 @@
         {% endif %}
       </div>
     </header>
-    {% include navigation.html %}
 
     <div id="content-wrapper">
       <div class="inner clearfix">
