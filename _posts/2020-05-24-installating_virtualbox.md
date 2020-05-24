@@ -7,7 +7,7 @@ category: blog
 author: Onur Yasarlar
 ---
 
-I was asked by a few people "why do you use libvirt as a virtualization later?" after one of my posts. Well, the answer is simple, I really like KVM and prefer it over VirtualBox but it does not stop me to write a small how to article on "How to install Virtualbox on Centos".
+I was asked by a few people "why do you use libvirt as virtualization layer?" after one of my posts. Well, the answer is simple, I really like KVM and prefer it over VirtualBox but it does not stop me to write a small how-to article on "How to install Virtualbox on Centos".
 
 I will again show you how I created an Ansible role for this. You can also find my role both in [Ansible Galaxy](https://galaxy.ansible.com/yasarlaro/virtualbox) and in my personal [Github repository](https://github.com/yasarlaro/ansible-role-virtualbox)
 
@@ -17,7 +17,7 @@ So let's get started. I divided my tasks into 2:
 
 As the name suggests, we first need to perform some preliminary checks. Let's take a look at `prelim.yml` task.
 
-First of all, let's check what OS versions this role supports. I always find it useful to perform this against the roles I write. It also prevent users to make some certain mistakes.
+First of all, let's check what OS versions this role supports. I always find it useful to perform this against the roles I write. It also prevents users to make some certain mistakes.
 
 ```yaml
 - name: "Check OS version"
