@@ -10,6 +10,7 @@ If you are a believer of testing, then you already know [Ansible Molecule](https
 
   - [Getting Started to Ansible Molecule](https://molecule.readthedocs.io/en/latest/getting-started.html)
   - [Ansible Module with Docker tutorial](https://www.youtube.com/watch?v=DAnMyBZ8-Qs)
+  - [Practical Ansible Testing with Molecule](https://www.ansible.com/practical-ansible-testing-with-molecule)
 
 It is becoming a habit for my Ansible roles to start with including OS specific variables. I am not breaking that habit and will start again. Let me show what it looks like for CentOS 7:
 
@@ -138,6 +139,6 @@ All prerequisites are completed so we can install molecule with `pip`.
     extra_args: --user
 ```
 
-That's it. I am planning to write another blog post on how to user `docker` and `vagrant` as your molecule drivers but two websites I provided at the beginning of the post will just do fine if you cannot wait for my new post.
+That's it. I am planning to write another blog post on how to user `docker` and `vagrant` as your molecule drivers but the websites I provided at the beginning of the post will just do fine if you cannot wait for my new post.
 
 I will not miss the time I wasted to run multiple tests for my Ansible roles and will let molecule handle the dirty job for me anymore. I wish I had been introduced to molecule earlier.
